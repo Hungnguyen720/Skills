@@ -1,0 +1,19 @@
+{
+  "name": "hung-skills",
+  "version": "0.1.0",
+  "description": "Hung Nguyen's agent skills: ClickUp task and review workflows, delivery pipeline, and writing discipline.",
+  "author": {
+    "name": "Hung Nguyen",
+    "url": "https://github.com/Hungnguyen720"
+  },
+  "homepage": "https://github.com/Hungnguyen720/Skills",
+  "repository": "https://github.com/Hungnguyen720/Skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "clickup",
+    "code-review",
+    "workflow",
+    "writing"
+  ]
+}

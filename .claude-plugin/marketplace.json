@@ -1,0 +1,22 @@
+{
+  "name": "hungnguyen720",
+  "owner": {
+    "name": "Hung Nguyen",
+    "url": "https://github.com/Hungnguyen720"
+  },
+  "description": "Hung Nguyen's agent skills, as an installable Claude Code plugin.",
+  "plugins": [
+    {
+      "name": "hung-skills",
+      "source": "./",
+      "description": "ClickUp task and review workflows, delivery pipeline, and writing discipline.",
+      "category": "developer-tools",
+      "keywords": [
+        "skills",
+        "clickup",
+        "code-review",
+        "workflow"
+      ]
+    }
+  ]
+}
