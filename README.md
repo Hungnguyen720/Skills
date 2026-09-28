@@ -28,6 +28,7 @@ Reachable by the model or by name, so they fire on their own when the job comes 
 
 | Skill | What it does |
 | --- | --- |
+| [app-map](./skills/app-map/SKILL.md) | Map an app as one local HTML page: wireframed screens whose buttons trace to actions, domains, tables and events. Extracts the map from a codebase, or plans a new app or change through a walkthrough. |
 | [new-skill](./skills/new-skill/SKILL.md) | Author a new skill in this repo, or fix one that is not firing. |
 
 ### User-invoked

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App map</title>
+<link rel="stylesheet" href="map.css">
+</head>
+<body>
+<header class="top">
+  <h1 id="appName">App map</h1>
+  <div class="search" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-owns="searchOut">
+    <input id="search" type="search" placeholder="Search screens, buttons, domains, tables, words" aria-label="Search the map" aria-controls="searchOut" autocomplete="off" spellcheck="false">
+    <kbd>/</kbd>
+    <div id="searchOut" role="listbox" hidden></div>
+  </div>
+  <nav class="apptabs modes" role="tablist" aria-label="Modes">
+    <button role="tab" aria-selected="true" data-tab="map" title="Every screen, and what each button does">Browse</button>
+    <button role="tab" aria-selected="false" data-tab="jobs" title="The jobs the app does and the journeys through it">Tour</button>
+    <button role="tab" aria-selected="false" data-tab="gaps" title="What's built, what's next, and the gaps">Status<span class="cnt" id="gapCount"></span></button>
+  </nav>
+  <nav class="apptabs pages" aria-label="Pages">
+    <button aria-selected="false" data-tab="arch">Architecture</button>
+    <button aria-selected="false" data-tab="words">Words</button>
+  </nav>
+  <label class="toggle"><input type="checkbox" id="showLabels" checked> Action labels</label>
+</header>
+
+<!-- Browse -->
+<section class="tab maptab" id="tab-map">
+  <nav id="screenNav" aria-label="Screens"></nav>
+  <div id="screensPane">
+    <p class="mapintro" id="mapIntro"></p>
+    <div id="screensOut"></div>
+  </div>
+  <aside id="side">
+    <div class="mapbox">
+      <svg id="dmap" viewBox="0 0 724 310" role="img" aria-label="Domain map"></svg>
+      <div class="maplegend">
+        <span><i class="b" style="background:var(--ink)">1</i>Owns the action</span>
+        <span><i class="b" style="background:var(--command)">2</i>Called or changed</span>
+        <span><svg viewBox="0 0 28 8"><line x1="1" y1="4" x2="27" y2="4" stroke="#1d2330" stroke-width="1.8"/></svg><span id="legendSame">Reacts right away</span></span>
+        <span><svg viewBox="0 0 28 8"><line x1="1" y1="4" x2="27" y2="4" stroke="#d9622b" stroke-width="1.8" stroke-dasharray="5 3"/></svg><span id="legendLater">Reacts later</span></span>
+        <span><svg viewBox="0 0 28 8"><line x1="1" y1="4" x2="27" y2="4" stroke="#8a93a3" stroke-width="1.5" stroke-dasharray="2 3"/></svg>Reads</span>
+        <span><i class="b" style="background:var(--miss)">3</i>Gaps</span>
+      </div>
+    </div>
+    <div id="trace" aria-live="polite"></div>
+  </aside>
+</section>
+
+<!-- Architecture: rendered from APP.arch in data/app.js -->
+<section class="tab page" id="tab-arch" hidden><div id="archOut"></div></section>
+
+<!-- Tour: jobs, places, links and journeys -->
+<section class="tab page" id="tab-jobs" hidden><div class="inner">
+  <h2>The jobs the app does</h2>
+  <p class="lede">Before screens, the jobs. Each screen exists because one of these jobs happens there.</p>
+  <table class="plain" id="jobTable"><thead><tr><th id="jobWho">The user wants to</th><th>Where it happens</th><th>How often</th></tr></thead><tbody></tbody></table>
+  <h3>App map</h3>
+  <p class="lede">Every place in the app and how you get to it.</p>
+  <div class="appmap" id="mapGroups"></div>
+  <div class="links" id="mapLinks"></div>
+  <h3>The main journeys</h3>
+  <p class="lede">The journeys the screens have to support, step by step. Click a step to open its screen and trace its button. If a step feels like too many clicks, that's where the design needs work.</p>
+  <div id="flows"></div>
+</div></section>
+
+<!-- Words -->
+<section class="tab page" id="tab-words" hidden><div class="inner">
+  <h2>Words</h2>
+  <p class="lede">The words for things the app names, with the recommendation and status for each. Each word also shows under Notes on the screens it names. The list lives in <code>data/words.js</code>.</p>
+  <table class="plain" id="wordTable"><thead><tr><th style="width:50px">#</th><th style="width:170px">The thing</th><th>Words in use</th><th style="width:170px">Recommend</th><th>Why</th><th style="width:150px">Status</th><th style="width:160px">Screens</th></tr></thead><tbody></tbody></table>
+  <h3>Places where sources contradict each other</h3>
+  <table class="plain" id="conflictTable"><thead><tr><th style="width:220px">Topic</th><th>One source says</th><th>Another says</th></tr></thead><tbody></tbody></table>
+</div></section>
+
+<!-- Status -->
+<section class="tab page" id="tab-gaps" hidden><div class="inner">
+  <h2>Status and gaps</h2>
+  <p class="lede">What's built, and where the screens and the backend don't line up yet. Gaps also show in red on the domain map and in each domain's action list. Actions live in <code>data/actions.js</code>.</p>
+  <div class="stat" id="buildStats"></div>
+  <div class="stat" id="gapStats"></div>
+  <h3>Buttons that name an action the backend doesn't have</h3>
+  <table class="plain" id="gapUnknown"><thead><tr><th style="width:230px">Action named on the screen</th><th>Screen</th></tr></thead><tbody></tbody></table>
+  <h3>Actions with no button on any screen</h3>
+  <table class="plain" id="gapNoBtn"><thead><tr><th style="width:280px">Action</th><th style="width:280px">Name in code</th><th>Note</th></tr></thead><tbody></tbody></table>
+  <h3>Actions nobody plans yet</h3>
+  <p class="lede">Things a user may expect to do that the plan leaves out, some on purpose.</p>
+  <table class="plain" id="gapUnplanned"><thead><tr><th style="width:130px">Domain</th><th style="width:280px">Action</th><th>Why it's missing</th></tr></thead><tbody></tbody></table>
+  <h3>Placeholder screens</h3>
+  <p class="lede">Added so every action has a button. Nobody has reviewed them.</p>
+  <table class="plain" id="gapPlaceholders"><thead><tr><th style="width:280px">Screen</th><th>Actions it gives a button</th></tr></thead><tbody></tbody></table>
+  <h3>System actions, with no button by design</h3>
+  <p class="lede">Webhooks, scheduled jobs and handlers that react to domain events. Nobody presses anything for these.</p>
+  <table class="plain" id="gapSystem"><thead><tr><th style="width:130px">Domain</th><th style="width:300px">Action</th><th>What it does</th></tr></thead><tbody></tbody></table>
+</div></section>
+
+<!-- Data first, then the engine. check.mjs loads every script here except engine/map.js, engine/tabs.js and engine/search.js. -->
+<script src="data/app.js"></script>
+<script src="data/actions.js"></script>
+<script src="engine/wireframe.js"></script>
+<script src="data/screens/start.js"></script>
+<script src="data/screens/walks.js"></script>
+<script src="data/journeys.js"></script>
+<script src="data/words.js"></script>
+<script src="engine/map.js"></script>
+<script src="engine/tabs.js"></script>
+<script src="engine/search.js"></script>
+</body>
+</html>
